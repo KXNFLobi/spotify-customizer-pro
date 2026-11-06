@@ -13,6 +13,6 @@ Escolha um tema e clique em **Aplicar no Spotify**. Um backup será criado antes
 
 ## Estado da versão
 
-Versão inicial para testes, destinada a Windows 10 22H2 / Windows 11 x64. O executável foi empacotado no Linux, o conteúdo do pacote foi conferido e 13 testes automatizados passaram. A execução em Windows e a aplicação em Spotify real ainda precisam de validação. Não possui assinatura digital. Não desative as proteções do Windows para executá-lo.
+Versão inicial para testes, destinada a Windows 10 22H2 / Windows 11 x64. O executável foi compilado e empacotado em Windows pelo GitHub Actions, e 13 testes automatizados passaram nesse ambiente. A execução em Windows e a aplicação em Spotify real ainda precisam de validação. Não possui assinatura digital. Não desative as proteções do Windows para executá-lo.
 
 A compatibilidade depende da versão do Spotify e é verificada pelo Spicetify. O pacote inclui o Spicetify CLI 2.46.4 oficial, recursos, licença LGPL-2.1 e fonte correspondente. O ZIP de fontes do aplicativo e as instruções completas também estão anexados à release.
