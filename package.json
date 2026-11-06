@@ -1,0 +1,79 @@
+{
+  "name": "spotify-customizer-pro",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Personaliza\u00e7\u00e3o visual local do Spotify via Spicetify",
+  "author": "Spotify Customizer Pro",
+  "main": "electron/main.cjs",
+  "scripts": {
+    "dev": "concurrently -k \"vite --host 127.0.0.1\" \"wait-on http://127.0.0.1:5173 && electron . --dev\"",
+    "build": "tsc --noEmit && vite build",
+    "start": "electron .",
+    "test": "node tests/service.test.cjs",
+    "dist:win": "npm run build && npm run vendor:spicetify && electron-builder --win nsis --publish never",
+    "vendor:spicetify": "node scripts/prepare-spicetify.cjs",
+    "dist:portable": "npm run build && npm run vendor:spicetify && electron-builder --win portable --x64 --publish never"
+  },
+  "dependencies": {
+    "@codemirror/lang-css": "^6.3.1",
+    "@uiw/react-codemirror": "^4.23.10",
+    "lucide-react": "^0.468.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.20",
+    "concurrently": "^9.1.2",
+    "electron": "^45.2.3",
+    "electron-builder": "^26.18.0",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.7.3",
+    "vite": "^6.4.1",
+    "wait-on": "^8.0.2"
+  },
+  "build": {
+    "appId": "com.customizer.spotifypro",
+    "productName": "Spotify Customizer Pro",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "package.json"
+    ],
+    "asar": true,
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "signAndEditExecutable": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true
+    },
+    "extraResources": [
+      {
+        "from": "vendor/spicetify",
+        "to": "spicetify"
+      }
+    ],
+    "portable": {
+      "artifactName": "Spotify-Customizer-Pro-${version}-portable-${arch}.${ext}",
+      "requestExecutionLevel": "user"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+SPOTIFY CUSTOMIZER PRO — PORTÁTIL
+Windows 10 22H2 / Windows 11, 64 bits
+
+1. Salve Spotify-Customizer-Pro-1.0.0-portable-x64.exe em uma pasta sua.
+2. Abra com dois cliques. Não precisa instalar o aplicativo, Node.js ou Spicetify.
+3. Seu Spotify desktop precisa já estar instalado e ter sido aberto ao menos uma vez.
+4. Abra Configurações e confira a detecção.
+5. Escolha um tema e clique em Aplicar no Spotify. O aplicativo cria um backup antes.
+
+Para voltar ao original, clique em Restaurar original no aplicativo.
+Não apague os backups enquanto quiser poder restaurar a instalação atual.
+Não compartilhe sua pasta de dados do usuário; envie apenas o executável.
+
+O executável inclui Spicetify 2.46.4 e seus recursos, licença e fontes.
+Compatibilidade depende da versão do Spotify. A versão Microsoft Store não é aceita.
+Perfis e backups são gravados nos dados locais do usuário, apesar de não haver instalação.
+O executável foi empacotado, mas ainda precisa de teste de execução em Windows real.
+Não desative o antivírus ou as proteções do Windows para executá-lo.

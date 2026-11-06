@@ -1,0 +1,55 @@
+name: Publicar portatil Windows
+on:
+  push:
+    branches: [main]
+    paths-ignore: ['README.md', 'docs/**']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: publicar-portatil
+  cancel-in-progress: false
+jobs:
+  release:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run dist:portable
+      - name: Preparar arquivos
+        shell: pwsh
+        run: |
+          $exe = Get-ChildItem release/*portable*.exe | Select-Object -First 1
+          if (!$exe) { throw 'Executavel portatil nao encontrado' }
+          $hash = (Get-FileHash $exe.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+          "$hash  $($exe.Name)" | Set-Content release/SHA256SUMS.txt -Encoding utf8
+          Copy-Item COMO-USAR-PORTATIL.txt release/COMO-USAR-PORTATIL.txt
+          git archive --format=zip --output=release/spotify-customizer-pro.zip HEAD
+          if ($LASTEXITCODE -ne 0) { throw 'Falha ao arquivar fontes' }
+      - name: Publicar download
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          $exe = Get-ChildItem release/*portable*.exe | Select-Object -First 1
+          gh release view v1.0.0 --repo $env:GH_REPO 2>$null
+          if ($LASTEXITCODE -eq 0) {
+            gh release upload v1.0.0 $exe.FullName release/spotify-customizer-pro.zip release/SHA256SUMS.txt release/COMO-USAR-PORTATIL.txt --repo $env:GH_REPO --clobber
+          } else {
+            gh release create v1.0.0 $exe.FullName release/spotify-customizer-pro.zip release/SHA256SUMS.txt release/COMO-USAR-PORTATIL.txt --repo $env:GH_REPO --target $env:GITHUB_SHA --title 'Spotify Customizer Pro 1.0.0 - Portatil Windows x64' --notes-file docs/RELEASE-v1.0.0.md --prerelease
+          }
+          if ($LASTEXITCODE -ne 0) { throw 'Falha ao publicar release' }
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Spotify-Customizer-Pro-Windows-x64
+          path: release/*.exe
+          if-no-files-found: ignore
+          retention-days: 14
