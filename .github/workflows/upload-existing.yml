@@ -1,0 +1,35 @@
+name: Enviar executavel pronto
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/upload-existing.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 95489bce00897c8d7ba159e70a54022ce60a792f
+      - uses: actions/download-artifact@v4
+        with:
+          name: Spotify-Customizer-Pro-Windows-x64
+          path: release
+          run-id: 42266537408
+          github-token: ${{ github.token }}
+      - name: Preparar fontes e checksum
+        run: |
+          cd release
+          sha256sum *portable*.exe > SHA256SUMS.txt
+          cd ..
+          git archive --format=zip --output=release/spotify-customizer-pro.zip HEAD
+          cp COMO-USAR-PORTATIL.txt release/COMO-USAR-PORTATIL.txt
+      - name: Enviar arquivos para a release existente
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: gh release upload v1.0.0 release/*.exe release/*.zip release/*.txt --clobber
