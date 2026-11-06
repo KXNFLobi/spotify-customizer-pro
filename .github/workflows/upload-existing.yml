@@ -1,8 +1,5 @@
 name: Enviar executavel pronto
 on:
-  push:
-    branches: [main]
-    paths: ['.github/workflows/upload-existing.yml']
   workflow_dispatch:
 permissions:
   contents: write
